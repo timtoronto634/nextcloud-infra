@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "ap-northeast-1"
 
   default_tags {
     tags = {
@@ -8,27 +8,23 @@ provider "aws" {
   }
 }
 
-resource "aws_vpc" "nextcloud-vpc" {
-  cidr_block = "10.0.0.0/16"
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+
+  name = "nextcloud-vpc"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["ap-northeast-1a"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
+
+  # enable_nat_gateway = true
+
+  tags = {
+    Terraform = "true"
+    Environment = "dev"
+  }
 }
-
-# module "vpc" {
-#   source = "terraform-aws-modules/vpc/aws"
-
-#   name = "nextcloud-vpc"
-#   cidr = "10.0.0.0/16"
-
-#   azs             = ["ap-northeast-1"]
-#   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-#   public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
-
-#   # enable_nat_gateway = true
-
-#   tags = {
-#     Terraform = "true"
-#     Environment = "dev"
-#   }
-# }
 
 /*
 module "ec2_instance" {

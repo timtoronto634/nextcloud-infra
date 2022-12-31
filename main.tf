@@ -26,13 +26,13 @@ module "vpc" {
   }
 }
 
-/*
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 3.0"
 
   name = "nextcloud-instance"
 
+  ami ="ami-0bba69335379e17f8"
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.main-ec2-key-pair.id
   monitoring             = true
@@ -49,4 +49,3 @@ resource "aws_key_pair" "main-ec2-key-pair" {
   key_name   = "test_key"
   public_key = file(var.ssh_key_path)
 }
-*/

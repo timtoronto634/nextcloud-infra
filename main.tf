@@ -26,6 +26,30 @@ module "vpc" {
   }
 }
 
+resource "aws_security_group" "allow_ssh" {
+  name = "allow_ssh"
+  description = "allow ssh to ec2 inside vpc"
+  vpc_id = module.vpc.vpc_id
+
+  
+  tags = {
+    Name = "nextcloud allow ssh"
+    Terraform   = "true"
+    Environment = "dev"
+  }
+}
+
+resource "aws_security_group_rule" "allow_ssh_ingress" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [module.vpc.vpc_cidr_block]
+  # ipv6_cidr_blocks  = [module.vpc.vpc_ipv6_cidr_block]
+  security_group_id = aws_security_group.allow_ssh.id
+}
+
+
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "~> 3.0"

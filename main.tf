@@ -45,7 +45,15 @@ resource "aws_security_group_rule" "allow_ssh_ingress" {
   to_port           = 22
   protocol          = "tcp"
   cidr_blocks       = [module.vpc.vpc_cidr_block]
-  # ipv6_cidr_blocks  = [module.vpc.vpc_ipv6_cidr_block]
+  security_group_id = aws_security_group.allow_ssh.id
+}
+
+resource "aws_security_group_rule" "allow_all_egress" {
+  type              = "egress"
+  cidr_blocks       = ["0.0.0.0/0"]
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
   security_group_id = aws_security_group.allow_ssh.id
 }
 

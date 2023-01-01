@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "allow_ssh_ingress" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = [module.vpc.vpc_cidr_block]
+  cidr_blocks       = ["0.0.0.0/0"]
   security_group_id = aws_security_group.allow_ssh.id
 }
 
@@ -68,7 +68,7 @@ module "ec2_instance" {
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.main-ec2-key-pair.id
   monitoring             = true
-  vpc_security_group_ids = [module.vpc.default_security_group_id]
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
   subnet_id = module.vpc.public_subnets[0]
 
   tags = {
